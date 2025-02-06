@@ -1,50 +1,135 @@
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Drawer } from "expo-router/drawer";
+
+import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
+import CostumDrawerContent from "@/components/Drawer/CostumDrawerContent";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import "react-native-reanimated";
+  Poppins_400Regular,
+  useFonts,
+  Poppins_300Light,
+} from "@expo-google-fonts/poppins";
 
 // Import your global CSS file
 import "../global.css";
+import LeftComponent from "@/components/Drawer/LeftComponent";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { UserProvider } from "../context/UserContext";
+import { StatusBar } from "react-native";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+export default function Layout() {
+  const [loaded, error] = useFonts({
+    Poppins_400Regular,
+    Poppins_300Light,
   });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
+  if (!loaded && !error) {
     return null;
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <UserProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-        <StatusBar style="auto" />
-      </UserProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Drawer
+        screenOptions={{
+          drawerPosition: "left",
+          drawerActiveTintColor: "#15803d",
+          drawerInactiveTintColor: "#262626",
+          drawerStatusBarAnimation: "fade",
+          /* overlayColor: "#000", */
+          drawerType: "front",
+          drawerLabelStyle: {
+            fontFamily: "Poppins_400Regular",
+            fontSize: 14,
+            fontWeight: "300",
+          },
+          headerTitleStyle: { fontFamily: "Poppins_300Light", fontSize: 20 },
+          headerTitleAlign: "left",
+          headerLeft: () => <LeftComponent />,
+          headerStyle: {
+            elevation: 0, // Para Android, quita la sombra
+            shadowOpacity: 0, // Para iOS, quita la sombra
+            borderBottomWidth: 1,
+            borderBottomColor: "#e5e5e5",
+            backgroundColor: "#ffffff",
+          },
+        }}
+        drawerContent={CostumDrawerContent}
+      >
+        <Drawer.Screen
+          name="index"
+          options={{
+            drawerLabel: "Login",
+            drawerStyle: { display: "none" },
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            drawerItemStyle: { display: "none" },
+            title: "Login",
+            drawerIcon: ({ size, color }) => (
+              <AntDesign name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="+not-found"
+          options={{
+            drawerLabel: "Not Found Page",
+            drawerStyle: { display: "none" },
+            headerShown: false,
+            drawerItemStyle: { display: "none" },
+            title: "Not Found Page",
+            drawerIcon: ({ size, color }) => (
+              <AntDesign name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="cuenta"
+          options={{
+            drawerLabel: "Mi cuenta",
+            drawerItemStyle: { display: "none" },
+            title: "Mi cuenta",
+            drawerIcon: ({ size, color }) => (
+              <AntDesign name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="inicio"
+          options={{
+            drawerLabel: "Inicio",
+            title: "Inicio",
+            drawerIcon: ({ size, color }) => (
+              <AntDesign name="home" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="calendar"
+          options={{
+            drawerLabel: "Calendario",
+            title: "Calendario",
+            drawerIcon: ({ size, color }) => (
+              <AntDesign name="calendar" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="prestaciones"
+          options={{
+            drawerLabel: "Mis prestaciones",
+            title: "Mis prestaciones",
+            drawerIcon: ({ size, color }) => (
+              <MaterialCommunityIcons
+                name="hand-extended-outline"
+                size={size}
+                color={color}
+              />
+            ),
+          }}
+        />
+      </Drawer>
+      <StatusBar backgroundColor="#fafafa" barStyle="dark-content" />
+    </GestureHandlerRootView>
   );
 }

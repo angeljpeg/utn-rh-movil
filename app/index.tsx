@@ -3,11 +3,13 @@ import { Poppins_400Regular, useFonts } from "@expo-google-fonts/poppins";
 import { fetchLogin } from "@/api/Users/fetchLogin";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "expo-router";
+import { StatusBar } from "react-native";
 
-import { useUser } from "../context/UserContext";
+import { useUserStore } from "../stores/user-store";
+import UtnSvg from "@/assets/svg/UtnSvg";
 
 export default function LoginUI() {
-  const { user, setUser } = useUser();
+  const { setUser, setToken } = useUserStore();
 
   const {
     control,
@@ -28,8 +30,11 @@ export default function LoginUI() {
       const response = await fetchLogin(data);
       if (response.token) {
         console.log("response", response);
-        
-        router.push("/(tabs)");
+
+        setUser(response.usuario);
+        setToken(response.token);
+
+        router.push("/inicio");
       } else {
         // Si la API devuelve un error, extraemos y mostramos el mensaje
         const errorMessage = response.data || "Error desconocido";
@@ -43,6 +48,18 @@ export default function LoginUI() {
     }
   };
 
+  const onSubmitStatic = () => {
+    setUser({
+      usuarioId: "9b0ef5c0-6b42-49a0-901b-480c7d514493",
+      matricula: "12345678",
+      password: "1234",
+      nombre: "Lilith Mania",
+      genero: "F"
+    })
+    setToken("token")
+    router.push("/inicio");
+  }
+
   const [loaded, error] = useFonts({
     Poppins_400Regular,
   });
@@ -51,8 +68,11 @@ export default function LoginUI() {
   }
 
   return (
-    <View style={style.container} className="bg-neutral-200">
+    <View style={style.container} className="bg-neutral-50">
       <View className="justify-center p-2 mx-4 rounded-lg">
+        <View className="w-[55%] self-center mb-4">
+          <UtnSvg height={80}/>
+        </View>
         <Text
           className="self-center text-3xl font-medium color-black "
           style={{ fontFamily: "Poppins_400Regular" }}
@@ -123,8 +143,8 @@ export default function LoginUI() {
         {errors.password && <Text>La contraseña es requerida</Text>}
 
         <Pressable
-          onPress={handleSubmit(onSubmit)}
-          className="px-4 py-2 mt-8 bg-green-500 rounded-lg active:bg-green-400"
+          onPress={/* handleSubmit(onSubmit) */ onSubmitStatic}
+          className="px-4 py-2 mt-8 rounded-lg bg-escuela active:bg-escuelaBajito"
         >
           <Text
             className="font-semibold text-center color-white"
@@ -134,6 +154,7 @@ export default function LoginUI() {
           </Text>
         </Pressable>
       </View>
+      
     </View>
   );
 }
