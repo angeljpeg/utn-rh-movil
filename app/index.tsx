@@ -97,13 +97,13 @@ export default function LoginUI() {
           name="matricula"
           control={control}
           defaultValue=""
-          rules={{ required: "El nombre es obligatorio" }}
+          rules={{ required: "La matricula es obligatoria" }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
-              placeholder="Ingresa tu nombre"
+              placeholder="Ingresa tu matricula"
               placeholderTextColor="gray"
               className="px-4 py-2 rounded-lg outline-none bg-neutral-100/90 color-neutral-700"
               style={{ fontFamily: "Poppins_400Regular" }}
