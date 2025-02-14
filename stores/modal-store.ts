@@ -1,6 +1,15 @@
 import { create } from "zustand";
 import { ReactNode } from "react";
 
+export interface InfoModal {
+  isActivated: boolean | null;
+  modalTitle: string | null;
+  modalBody: ReactNode | null;
+  hasButtons: boolean | null;
+  buttonTitle: string | null;
+  buttonAction: (() => void) | null;
+}
+
 // Tipado del estado global
 interface Modal {
   isActivated: boolean | null;

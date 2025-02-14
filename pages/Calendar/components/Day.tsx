@@ -24,6 +24,9 @@ export function CustomDayComponent({
   state: stateType;
   onMonthChange: (date: DateData) => void; // Hacerlo opcional
 }) {
+  const today = new Date();
+  const todayFormatted = today.toLocaleDateString('en-CA');
+
   const isOutsideMonth = state === "disabled";
 
   // Buscar si la fecha pertenece a un rango en dates[]
@@ -82,7 +85,13 @@ export function CustomDayComponent({
       ]}
       className="items-center justify-center w-full py-2"
     >
-      <Text style={[styles.text, { color: textColor }]}>{date.day}</Text>
+      {todayFormatted === date.dateString ? (
+        <View className="items-center justify-center px-2 pt-1 rounded-full bg-escuela">
+          <Text style={[styles.text, { color: textColor }]}>{date.day}</Text>
+        </View>
+      ) : (
+        <Text style={[styles.text, { color: textColor }]} className="pt-1">{date.day}</Text>
+      )}
     </TouchableOpacity>
   );
 }

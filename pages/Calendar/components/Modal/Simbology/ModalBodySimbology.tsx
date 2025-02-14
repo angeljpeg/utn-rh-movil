@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, View, Text } from "react-native";
+import { View } from "react-native";
 import { Simbol } from "./Simbol";
 import { simbols } from "./data/simbols";
 

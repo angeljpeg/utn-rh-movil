@@ -1,10 +1,15 @@
 import { View, Pressable, Animated, Platform } from "react-native";
-import Entypo from "@expo/vector-icons/Entypo";
 import { useModal } from "@/stores/modal-store";
-import { ModalBodySimbology } from "@/components/Calendar/components/Modal/Simbology/ModalBodySimbology";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
+import { InfoModal } from "@/stores/modal-store";
 
-export function CheckSymbology() {
+export function BottomRightButton({
+  icon,
+  arrayModal,
+}: {
+  icon: ReactNode;
+  arrayModal: InfoModal;
+}) {
   const { setModal } = useModal();
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const Component = Platform.OS === "web" ? View : Animated.View;
@@ -25,8 +30,13 @@ export function CheckSymbology() {
     }).start();
 
     // Abre el modal
-    setModal(true, "Simbología", false, <ModalBodySimbology />, "Aceptar", () =>
-      console.log("Clic en el botón del modal")
+    setModal(
+      arrayModal.isActivated ?? true,
+      arrayModal.modalTitle ?? "",
+      arrayModal.hasButtons ?? false,
+      arrayModal.modalBody,
+      arrayModal.buttonTitle ?? "",
+      arrayModal.buttonAction ?? undefined
     );
   };
 
@@ -38,12 +48,12 @@ export function CheckSymbology() {
       <Pressable
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        className="p-4 mb-6 mr-6 active:bg-escuelaBajito bg-escuela rounded-3xl"
+        className="items-center justify-center mb-6 mr-6 rounded-full w-14 h-14 bg-escuela"
       >
         <Component
           style={Platform.OS !== "web" && { transform: [{ scale: scaleAnim }] }}
         >
-          <Entypo name="grid" size={35} color="#ffffff" />
+          {icon}
         </Component>
       </Pressable>
     </Component>

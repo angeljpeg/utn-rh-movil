@@ -15,6 +15,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useEffect } from "react";
+import { useDrawerStatus } from "@react-navigation/drawer";
 
 export function Modal() {
   const {
@@ -27,8 +28,32 @@ export function Modal() {
     hasButtons,
   } = useModal();
 
+  const isDrawerOpen = useDrawerStatus() === "open";
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      if (isActivated) {
+        setModal(
+          false,
+          modalTitle ?? "",
+          hasButtons ?? true,
+          modalBody,
+          buttonTitle ?? "",
+          () => console.log("Cerrando modal general por el drawer")
+        );
+      }
+    }
+  }, [isDrawerOpen]);
+
   const hacerModalFalso = () => {
-    setModal(false, modalTitle ?? "", false, modalBody, "", () => {});
+    setModal(
+      false,
+      modalTitle ?? "",
+      hasButtons ?? false,
+      modalBody,
+      buttonTitle ?? "",
+      () => {}
+    );
   };
 
   const opacity = useSharedValue(0);
@@ -74,7 +99,7 @@ export function Modal() {
   return (
     <View
       pointerEvents={isActivated ? "auto" : "none"}
-      className="absolute top-0 left-0 flex items-center justify-center w-full h-full"
+      className="absolute top-0 left-0 z-40 flex items-center justify-center w-full h-full"
     >
       {/* Fondo oscuro animado */}
       <Animated.View
@@ -122,22 +147,32 @@ export function Modal() {
         {hasButtons && (
           <View className="flex-row justify-between w-full mt-4">
             <Pressable
-              className="flex-1 p-2 bg-red-400 rounded-lg"
+              className="flex-1 p-2 bg-red-400 rounded-lg active:bg-red-300"
               onPress={hacerModalFalso}
+              hitSlop={20}
             >
-              <Text className="text-center text-white">Cancelar</Text>
+              <Text
+                className="text-center text-white"
+                style={{ fontFamily: "Poppins_400Regular" }}
+              >
+                Cancelar
+              </Text>
             </Pressable>
             <View className="w-2" />
             <Pressable
-              className="flex-1 p-2 bg-green-400 rounded-lg"
+              className="flex-1 p-2 bg-green-400 rounded-lg active:bg-green-300"
               onPress={buttonAction}
             >
-              <Text className="text-center text-white">{buttonTitle}</Text>
+              <Text
+                className="text-center text-white"
+                style={{ fontFamily: "Poppins_400Regular" }}
+              >
+                {buttonTitle}
+              </Text>
             </Pressable>
           </View>
         )}
       </Animated.View>
-      {/* Contenedor del modal centrado */}
     </View>
   );
 }

@@ -107,18 +107,18 @@ export default function Layout() {
         <Drawer.Screen
           name="calendar"
           options={{
-            drawerLabel: "Calendario",
-            title: "Calendario",
+            drawerLabel: "Descansos",
+            title: "Descansos",
             drawerIcon: ({ size, color }) => (
               <AntDesign name="calendar" size={size} color={color} />
             ),
           }}
         />
         <Drawer.Screen
-          name="prestaciones"
+          name="prestacion"
           options={{
-            drawerLabel: "Mis prestaciones",
-            title: "Mis prestaciones",
+            drawerLabel: "Prestaciones",
+            title: "Prestaciones",
             drawerIcon: ({ size, color }) => (
               <MaterialCommunityIcons
                 name="hand-extended-outline"
@@ -126,6 +126,16 @@ export default function Layout() {
                 color={color}
               />
             ),
+          }}
+        />
+        <Drawer.Screen
+          name="prestaciones/prestacionId/[id]"
+          options={{
+            drawerLabel: "Prestación específica",
+            drawerStyle: { display: "flex" },
+            headerShown: true,
+            drawerItemStyle: { display: "none" },
+            title: "Prestación específica",
           }}
         />
       </Drawer>

@@ -4,6 +4,7 @@ export type DateDataType = {
   fechaFinal: string
   nombre_tipo: string
   color: string
+  status: string
 };
 
 export type stateType = "disabled" | "today" | ""
